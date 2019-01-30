@@ -664,7 +664,7 @@
         </outbound-socket-binding>
 
         <outbound-socket-binding name="remote-ejb-serverB" source-port="0" fixed-source-port="false">
-            <remote-destination host="remote-ejb-serverB-sample" port="8080"/>
+            <remote-destination host="remote-ejb-serverb-sample" port="8080"/>
         </outbound-socket-binding>
 
     </socket-binding-group>
