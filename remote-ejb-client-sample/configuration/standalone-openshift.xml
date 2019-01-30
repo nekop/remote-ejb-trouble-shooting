@@ -56,6 +56,13 @@
                 </authorization>
                 <!-- No SSL configuration discovered -->
             </security-realm>
+
+            <security-realm name="ejb-security-realm">
+                <server-identities>
+                    <secret value="MTE4OWViQG5r"/>
+                </server-identities>
+            </security-realm>
+
         </security-realms>
         <audit-log>
             <formatters>
@@ -134,7 +141,7 @@
         <subsystem xmlns="urn:jboss:domain:bean-validation:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
-                <datasource jta="true" jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true"> <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url> <driver>h2</driver> <security> <user-name>sa</user-name> <password>sa</password> </security> </datasource><!-- ##DATASOURCES## -->
+                <datasource jta="true" jndi-name="java:jboss/datasources/ExampleDS2" pool-name="ExampleDS2" enabled="true" use-java-context="true"> <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url> <driver>h2</driver> <security> <user-name>sa</user-name> <password>sa</password> </security> </datasource><!-- ##DATASOURCES## -->
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -404,6 +411,17 @@
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
             <endpoint/>
             <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
+
+            <outbound-connections>
+                <remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting" username="ejb" security-realm="ejb-security-realm">
+		        <!-- remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting" -->
+			        <properties>
+				        <property name="SASL_POLICY_NOANONYMOUS" value="false"/>
+				        <property name="SSL_ENABLED" value="false"/>
+			        </properties>
+		        </remote-outbound-connection>
+            </outbound-connections>
+
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0">
             <resource-adapters>
@@ -641,5 +659,10 @@
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
+
+        <outbound-socket-binding name="remote-ejb-serverA" source-port="0" fixed-source-port="false">
+            <remote-destination host="remote-ejb-serverA-sample" port="8080"/>
+        </outbound-socket-binding>
+
     </socket-binding-group>
 </server>
