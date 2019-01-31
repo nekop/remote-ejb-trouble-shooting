@@ -59,7 +59,7 @@
 
             <security-realm name="ejb-security-realm">
                 <server-identities>
-                    <secret value="MTE4OWViQG5r"/>
+                    <secret value="cEBzc3cwcmQwMQ==" />
                 </server-identities>
             </security-realm>
 
