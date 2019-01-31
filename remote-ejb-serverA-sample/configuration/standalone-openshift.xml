@@ -440,7 +440,22 @@
                 </maximum-set>
             </deployment-permissions>
         </subsystem>
+
+        <!--  
         <subsystem xmlns="urn:wildfly:elytron:1.2" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+        -->
+        <!-- inserted -->
+        <subsystem xmlns="urn:wildfly:elytron:1.2" default-authentication-context="default" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+            <authentication-client>
+                <authentication-configuration name="ejb-auth" authentication-name="ejb">
+                    <credential-reference clear-text="p@ssw0rd01"/>
+                </authentication-configuration>
+                <authentication-context name="default">
+                    <match-rule authentication-configuration="ejb-auth"/>
+                </authentication-context>
+            </authentication-client>
+            <!-- inserted -->
+
             <providers>
                 <provider-loader name="elytron" module="org.wildfly.security.elytron"/>
                 <provider-loader name="openssl" module="org.wildfly.openssl"/>
