@@ -532,7 +532,7 @@
         <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
             <endpoint/>
-            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
+            <http-connector name="http-remoting-connector" connector-ref="default" sasl-authentication-factory="application-sasl-authentication"/>
 
             <outbound-connections>
                 <remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting" username="ejb" security-realm="ejb-security-realm">
