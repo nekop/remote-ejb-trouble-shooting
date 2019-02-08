@@ -56,13 +56,6 @@
                 </authorization>
                 <!-- No SSL configuration discovered -->
             </security-realm>
-
-            <security-realm name="ejb-security-realm">
-                <server-identities>
-                    <secret value="cEBzc3cwcmQwMQ==" />
-                </server-identities>
-            </security-realm>
-
         </security-realms>
         <audit-log>
             <formatters>
@@ -139,10 +132,9 @@
             </thread-pool>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:bean-validation:1.0"/>
-        <!--
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
-                <datasource jta="true" jndi-name="java:jboss/datasources/ExampleDS2" pool-name="ExampleDS2" enabled="true" use-java-context="true"> <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url> <driver>h2</driver> <security> <user-name>sa</user-name> <password>sa</password> </security> </datasource>
+                <datasource jta="true" jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true"> <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url> <driver>h2</driver> <security> <user-name>sa</user-name> <password>sa</password> </security> </datasource><!-- ##DATASOURCES## -->
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -153,10 +145,10 @@
                     <driver name="postgresql" module="org.postgresql">
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
+                    <!-- ##DRIVERS## -->
                 </drivers>
             </datasources>
         </subsystem>
-        -->
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}" auto-deploy-exploded="false"/>
         </subsystem>
@@ -176,14 +168,12 @@
                     <managed-scheduled-executor-service name="default" jndi-name="java:jboss/ee/concurrency/scheduler/default" context-service="default" hung-task-threshold="60000" keepalive-time="3000"/>
                 </managed-scheduled-executor-services>
             </concurrent>
-            <!--
             <default-bindings context-service="java:jboss/ee/concurrency/context/default"
                               datasource="java:jboss/datasources/ExampleDS"
                               jms-connection-factory="java:jboss/DefaultJMSConnectionFactory"
                               managed-executor-service="java:jboss/ee/concurrency/executor/default"
                               managed-scheduled-executor-service="java:jboss/ee/concurrency/scheduler/default"
                               managed-thread-factory="java:jboss/ee/concurrency/factory/default"/>
-            -->
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ejb3:5.0">
             <session-bean>
@@ -323,7 +313,7 @@
                 <protocol type="AUTH">
                     <property name="auth_class">org.jgroups.auth.MD5Token</property>
                     <property name="token_hash">SHA</property>
-                    <property name="auth_value">u4NpAjv1</property>
+                    <property name="auth_value">HELwjKC5</property>
                 </protocol>
 
                     <protocol type="pbcast.GMS"/>
@@ -346,7 +336,7 @@
                 <protocol type="AUTH">
                     <property name="auth_class">org.jgroups.auth.MD5Token</property>
                     <property name="token_hash">SHA</property>
-                    <property name="auth_value">u4NpAjv1</property>
+                    <property name="auth_value">HELwjKC5</property>
                 </protocol>
 
                     <protocol type="pbcast.GMS"/>
@@ -414,17 +404,14 @@
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
             <endpoint/>
             <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
-
             <outbound-connections>
-                <remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting" username="ejb" security-realm="ejb-security-realm">
-		        <!-- remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting" -->
+		        <remote-outbound-connection name="remote-ejb-connection-serverA" outbound-socket-binding-ref="remote-ejb-serverA" protocol="http-remoting">
 			        <properties>
 				        <property name="SASL_POLICY_NOANONYMOUS" value="false"/>
 				        <property name="SSL_ENABLED" value="false"/>
 			        </properties>
 		        </remote-outbound-connection>
             </outbound-connections>
-
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0">
             <resource-adapters>
@@ -440,22 +427,7 @@
                 </maximum-set>
             </deployment-permissions>
         </subsystem>
-
-        <!--  
         <subsystem xmlns="urn:wildfly:elytron:1.2" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
-        -->
-        <!-- inserted -->
-        <subsystem xmlns="urn:wildfly:elytron:1.2" default-authentication-context="default" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
-            <authentication-client>
-                <authentication-configuration name="ejb-auth" authentication-name="ejb">
-                    <credential-reference clear-text="p@ssw0rd01"/>
-                </authentication-configuration>
-                <authentication-context name="default">
-                    <match-rule authentication-configuration="ejb-auth"/>
-                </authentication-context>
-            </authentication-client>
-            <!-- inserted -->
-            
             <providers>
                 <provider-loader name="elytron" module="org.wildfly.security.elytron"/>
                 <provider-loader name="openssl" module="org.wildfly.openssl"/>
@@ -677,10 +649,8 @@
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
-
         <outbound-socket-binding name="remote-ejb-serverA" source-port="0" fixed-source-port="false">
             <remote-destination host="remote-ejb-servera-sample" port="8080"/>
         </outbound-socket-binding>
-
     </socket-binding-group>
 </server>
