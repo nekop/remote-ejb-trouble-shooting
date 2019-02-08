@@ -102,8 +102,17 @@
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
-            <root-logger>
+            <logger category="org.jboss.remoting">
                 <level name="TRACE"/>
+            </logger>
+             <logger category="org.jboss.ejb3">
+                <level name="TRACE"/>
+            </logger>
+             <logger category="org.wildfly.security">
+                <level name="TRACE"/>
+            </logger>
+            <root-logger>
+                <level name="INFO"/>
                 <handlers>
                     <handler name="CONSOLE"/>
                 </handlers>
