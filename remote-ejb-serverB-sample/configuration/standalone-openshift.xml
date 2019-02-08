@@ -90,7 +90,7 @@
         <subsystem xmlns="urn:jboss:domain:logging:3.0">
             <console-handler name="CONSOLE">
                 <formatter>
-                    <named-formatter name="COLOR-PATTERN"/>
+                    <named-formatter name="PATTERN"/>
                 </formatter>
             </console-handler>
             <logger category="com.arjuna">
@@ -103,7 +103,7 @@
                 <level name="WARN"/>
             </logger>
             <root-logger>
-                <level name="INFO"/>
+                <level name="TRACE"/>
                 <handlers>
                     <handler name="CONSOLE"/>
                 </handlers>
@@ -115,8 +115,8 @@
                     </properties>
                 </custom-formatter>
             </formatter>
-            <formatter name="COLOR-PATTERN">
-                <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
+            <formatter name="PATTERN">
+                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:batch-jberet:2.0">
